@@ -2,9 +2,9 @@
 </script>
 
 <template lang="pug">
-div
+div(class="test")
   h1(class="text-2xl font-bold") Test
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 </style>
