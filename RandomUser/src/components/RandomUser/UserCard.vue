@@ -21,7 +21,7 @@ const props = defineProps({
     type: Number,
     defalut: 0
   },
-  Following: {
+  following: {
     type: Number,
     defalut: 0
   }
@@ -41,11 +41,11 @@ div(id="UserCard")
       
       div(class="h-30 mx-auto flex justify-center items-center")
         div(class="text-indigo-500 mr-4") Post
-          div(class="text-cneter text-black font-semibold") {{ `200` }}
+          div(class="text-cneter text-black font-semibold") {{ `${post}` }}
         div(class="text-indigo-500 mr-4") Followers
-          div(class="text-center text-black font-semibold") {{ `200` }}
+          div(class="text-center text-black font-semibold") {{ `${followers}` }}
         div(class="text-indigo-500") Following
-          div(class="text-center text-black font-semibold") {{ `200` }}
+          div(class="text-center text-black font-semibold") {{ `${following}` }}
     
     div(class="absolute right-2 top-2")
       font-awesome-icon(:class="{ 'text-red-500': isFavorite }"

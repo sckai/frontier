@@ -4,6 +4,7 @@ import { ref } from 'vue'
 // components
 import Dropdown from '@/components/RandomUser/Dropdown.vue'
 import UserCard from '@/components/RandomUser/UserCard.vue'
+import UserList from '@/components/RandomUser/UserList.vue'
 
 const statusSet = ref('ALL') // ALL、Favorite
 const displayMode = ref('Card') // Card 、List
@@ -54,6 +55,9 @@ div(id="RandomUser"
   //- mode has card、list
   div
     //- card component
+    div
+      ul(class="max-w divide-y divide-gray-200 dark:divide-gray-700")
+        UserList
     //- list component
     div(class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4")
       UserCard
