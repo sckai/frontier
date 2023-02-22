@@ -5,9 +5,12 @@ import { ref } from 'vue'
 import Dropdown from '@/components/RandomUser/Dropdown.vue'
 import UserCard from '@/components/RandomUser/UserCard.vue'
 import UserList from '@/components/RandomUser/UserList.vue'
+import Pagination from '@/components/RandomUser/Pagination.vue'
 
-const statusSet = ref('ALL') // ALL、Favorite
-const displayMode = ref('Card') // Card 、List
+const statusSet = ref('ALL') // ALL、Favorite, default: ALL
+const displayMode = ref('Card') // Card 、List, default: Card
+const page = ref(1)
+const total = ref(10)
 
 // event
 const ToggleStatus = (status: string) => {
@@ -22,6 +25,10 @@ const ToggleDisplayMode = (mode: string) => {
 // emit
 const GetDropdownValue = (dropdownValue: any) => {
   console.log(dropdownValue)
+}
+
+const GetPage = (pageNum: number) => {
+  page.value = pageNum
 }
 </script>
 
@@ -53,7 +60,7 @@ div(id="RandomUser"
         @click="ToggleDisplayMode('Card')")
 
   //- mode has card、list
-  div
+  div(class="mb-8")
     //- card component
     div
       ul(class="max-w divide-y divide-gray-200 dark:divide-gray-700")
@@ -65,4 +72,9 @@ div(id="RandomUser"
       UserCard
       UserCard
       UserCard
+
+  div(class="flex justify-center items-center")
+    Pagination(:currentPage="page"
+      :total="total"
+      @GetPage="GetPage")
 </template>

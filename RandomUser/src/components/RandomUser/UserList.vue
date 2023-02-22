@@ -21,7 +21,7 @@ const props = defineProps({
     type: Number,
     defalut: 0
   },
-  Following: {
+  following: {
     type: Number,
     defalut: 0
   }
