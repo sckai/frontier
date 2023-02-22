@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import RandomUser from '@/components/RandomUser.vue'
 </script>
 
 <template lang="pug">
-div(class="test")
-  h1(class="text-2xl font-bold") Test
+RandomUser
 </template>
 
 <style lang="scss" scoped>
