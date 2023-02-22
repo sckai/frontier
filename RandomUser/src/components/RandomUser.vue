@@ -62,11 +62,16 @@ div(id="RandomUser"
   //- mode has card、list
   div(class="mb-8")
     //- card component
-    div
+    div(v-show="displayMode === 'List'")
       ul(class="max-w divide-y divide-gray-200 dark:divide-gray-700")
         UserList
+        UserList
+        UserList
+        UserList
+        UserList
     //- list component
-    div(class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4")
+    div(v-show="displayMode === 'Card'"
+      class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4")
       UserCard
       UserCard
       UserCard
