@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
-import axios from 'axios'
+import { ref, reactive, onMounted } from 'vue'
 
 // api fn
 import { GetUserList } from '@/api/index'
@@ -14,14 +13,14 @@ import Pagination from '@/components/RandomUser/Pagination.vue'
 // data
 const statusSet = ref('ALL') // ALL、Favorite, default: ALL
 const displayMode = ref('Card') // Card 、List, default: Card
-let listData = ref([])
-let favoriteData = ref([])
+let listData:any = reactive({ userData:[] })
+let displayData:any = reactive({ userData:[] })
+let favoriteData:any = reactive({ userData:[] })
 const page = ref(1)
 const count = ref(10)
 const total = ref(3010)
 const results = ref(count.value)
 const pagesNums = ref(Math.ceil(total.value / count.value))
-
 
 // Init
 const Init = onMounted(() => {
@@ -31,23 +30,37 @@ const Init = onMounted(() => {
 
 // api
 const ApiGetUserList = async (params: any) => {
-  listData.value = []
+  displayData.userData = []
+  listData.userData = []
   const data = await GetUserList(params)
 
-  listData.value = data.data.results
+  data.data.results.forEach((userItem: { isFavorite: boolean }) => {
+    userItem['isFavorite'] = false
+  })
+
+  listData.userData = data.data.results
+  displayData.userData = data.data.results
 }
 
 // event
 const ToggleStatus = (status: string) => {
+  if (statusSet.value === status) return
+
   statusSet.value = status
+  if (statusSet.value === 'Favorite') { 
+    displayData.userData = favoriteData.userData
+    return
+  }
+
+  displayData.userData = listData.userData
 }
 
 const ToggleDisplayMode = (mode: string) => {
-  if (displayMode.value === 'mode') return
+  if (displayMode.value === mode) return
   displayMode.value = mode
 }
 
-// emit
+// method
 const GetDropdownValue = (dropdownValue: any) => {
   page.value = 1
   pagesNums.value = Math.ceil(total.value / dropdownValue)
@@ -74,6 +87,29 @@ const GetPage = (pageValue: number) => {
 
   ApiGetUserList({page: page.value, results: results.value })
 }
+
+// method
+const GetFavoriteStatus = (favoriteStatus: boolean, id: String) => {
+
+  listData.userData.forEach((userItem: any) => {
+    if (userItem['login']['uuid'] === id) {
+      if (favoriteStatus) favoriteData.userData.push(userItem)
+      if (!favoriteStatus) DelFavorite(id)
+      userItem['isFavorite'] = favoriteStatus
+    }
+  })
+}
+
+const DelFavorite = (id: String) => {
+  for(let index = 0; index < favoriteData.userData.length; index++) {
+    if(favoriteData.userData[index].login.uuid = id) {
+      favoriteData.userData.splice(index, 1)
+      break
+    }
+  }
+}
+
+// const 
 </script>
 
 <template lang="pug">
@@ -108,7 +144,7 @@ div(id="RandomUser"
     //- card component
     div(v-show="displayMode === 'List'")
       ul(class="max-w divide-y divide-gray-200 dark:divide-gray-700")
-        div(v-for="list in listData"
+        div(v-for="list in displayData.userData"
           :key="list.login.uuid")
           UserList(:photoUrl="list.picture.large"
             :name="`${list.name.first} ${list.name.last}`"
@@ -119,15 +155,19 @@ div(id="RandomUser"
     //- list component
     div(v-show="displayMode === 'Card'"
       class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4")
-      div(v-for="list in listData"
+      div(v-for="list in displayData.userData"
         :key="list.login.uuid")
         UserCard(:photoUrl="list.picture.large"
           :name="`${list.name.first} ${list.name.last}`"
+          :id="list.login.uuid"
           :post="list.registered.age"
           :followers="list.location.street.number"
-          :following="list.dob.age")
+          :following="list.dob.age"
+          :isFavorite="list.isFavorite"
+          @GetFavoriteStatus="GetFavoriteStatus")
 
-  div(class="flex justify-center items-center")
+  div(v-show="statusSet === 'ALL'"
+    class="flex justify-center items-center")
     Pagination(:currentPage="page"
       :total="pagesNums"
       @GetPage="GetPage")

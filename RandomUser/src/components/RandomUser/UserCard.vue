@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+
 // props
 const props = defineProps({
+  id: {
+    type: String,
+    default: ''
+  },
   photoUrl: {
     type: String,
     default: ''
@@ -27,6 +32,17 @@ const props = defineProps({
     defalut: 0
   }
 })
+
+// emit
+const emit = defineEmits(['GetFavoriteStatus'])
+const GetFavoriteStatus = (favoriteStatus: boolean) => {
+  emit("GetFavoriteStatus", favoriteStatus, props.id)
+}
+
+// method
+const ClickFavoriteStatus = (isFavorite:　boolean) => {
+  GetFavoriteStatus(isFavorite)
+}
 </script>
 
 <template lang="pug">
@@ -52,5 +68,6 @@ div(id="UserCard")
       div(class="absolute right-2 top-2")
         font-awesome-icon(:class="{ 'text-red-500': isFavorite }"
           class="text-2xl cursor-pointer"
-          icon="fa-solid fa-heart")
+          icon="fa-solid fa-heart"
+          @click="ClickFavoriteStatus(!isFavorite)")
 </template>
