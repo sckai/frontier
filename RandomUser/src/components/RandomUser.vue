@@ -94,10 +94,10 @@ const GetFavoriteStatus = (favoriteStatus: boolean, id: String) => {
   listData.userData.forEach((userItem: any) => {
     if (userItem['login']['uuid'] === id) {
       if (favoriteStatus) favoriteData.userData.push(userItem)
-      if (!favoriteStatus) DelFavorite(id)
       userItem['isFavorite'] = favoriteStatus
     }
   })
+  if (!favoriteStatus) DelFavorite(id)
 }
 
 const DelFavorite = (id: String) => {
