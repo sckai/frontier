@@ -27,19 +27,12 @@ const props = defineProps({
     defalut: 0
   }
 })
-
-// computed
-const showSkeleton = computed(() => {
-  if (props.photoUrl === '') return true
-
-  return false
-})
 </script>
 
 <template lang="pug">
 div(id="UserCard")
-  div(class="relative p-4 h-min-64 w-full border-2 shadow-2xl mx-auto rounded-md")
-    div(v-if="!showSkeleton")
+  div(class="relative p-4 h-min-64 w-full sm:w-full md:w-80 lg:w-80 border-2 shadow-2xl mx-auto rounded-md")
+    div
       div(class="flex-wrap justify-center sm:flex md:flex lg:flex h-30")
         div
           div(class="mx-auto w-full rounded-bl-md mb-2")
@@ -49,30 +42,15 @@ div(id="UserCard")
             ) {{ `${name}` }}
         
         div(class="h-30 mx-auto flex justify-center items-center")
-          div(class="text-indigo-500 mr-4") Post
-            div(class="text-cneter text-black font-semibold") {{ `${post}` }}
-          div(class="text-indigo-500 mr-4") Followers
-            div(class="text-center text-black font-semibold") {{ `${followers}` }}
-          div(class="text-indigo-500") Following
-            div(class="text-center text-black font-semibold") {{ `${following}` }}
+          div(class="text-indigo-500 mr-4 text-center") Post
+            div(class="text-black font-semibold") {{ `${post}` }}
+          div(class="text-indigo-500 mr-4 text-center") Followers
+            div(class=" text-black font-semibold") {{ `${followers}` }}
+          div(class="text-indigo-500 text-center") Following
+            div(class=" text-black font-semibold") {{ `${following}` }}
       
       div(class="absolute right-2 top-2")
         font-awesome-icon(:class="{ 'text-red-500': isFavorite }"
           class="text-2xl cursor-pointer"
           icon="fa-solid fa-heart")
-    
-    //- skeleton
-    div(v-if="showSkeleton"
-      class="flex animate-pulse")
-      div(class="flex-shrink-0")
-        span(class="w-12 h-12 block bg-gray-200 rounded-full dark:bg-gray-700")
-
-      div(class="ml-4 mt-2 w-full")
-        h3(class="h-4 bg-gray-200 rounded-md dark:bg-gray-700" style="width: 40%;")
-
-        ul(class="mt-5 space-y-3")
-          li(class="w-full h-4 bg-gray-200 rounded-md dark:bg-gray-700")
-          li(class="w-full h-4 bg-gray-200 rounded-md dark:bg-gray-700")
-          li(class="w-full h-4 bg-gray-200 rounded-md dark:bg-gray-700")
-          li(class="w-full h-4 bg-gray-200 rounded-md dark:bg-gray-700")
 </template>

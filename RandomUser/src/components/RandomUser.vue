@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, watch } from 'vue'
+import axios from 'axios'
+
+// api fn
+import { GetUserList } from '@/api/index'
 
 // components
 import Dropdown from '@/components/RandomUser/Dropdown.vue'
@@ -7,10 +11,31 @@ import UserCard from '@/components/RandomUser/UserCard.vue'
 import UserList from '@/components/RandomUser/UserList.vue'
 import Pagination from '@/components/RandomUser/Pagination.vue'
 
+// data
 const statusSet = ref('ALL') // ALL、Favorite, default: ALL
 const displayMode = ref('Card') // Card 、List, default: Card
+let listData = ref([])
+let favoriteData = ref([])
 const page = ref(1)
-const total = ref(10)
+const count = ref(10)
+const total = ref(3010)
+const results = ref(count.value)
+const pagesNums = ref(Math.ceil(total.value / count.value))
+
+
+// Init
+const Init = onMounted(() => {
+  results.value = count.value
+  ApiGetUserList({page: page.value, results: results.value })
+})
+
+// api
+const ApiGetUserList = async (params: any) => {
+  listData.value = []
+  const data = await GetUserList(params)
+
+  listData.value = data.data.results
+}
 
 // event
 const ToggleStatus = (status: string) => {
@@ -24,11 +49,30 @@ const ToggleDisplayMode = (mode: string) => {
 
 // emit
 const GetDropdownValue = (dropdownValue: any) => {
-  console.log(dropdownValue)
+  page.value = 1
+  pagesNums.value = Math.ceil(total.value / dropdownValue)
+  count.value = dropdownValue
+  results.value = dropdownValue
+
+  ApiGetUserList({page: page.value, results: results.value })
 }
 
-const GetPage = (pageNum: number) => {
-  page.value = pageNum
+const GetPage = (pageValue: number) => {
+  page.value = pageValue
+
+  if (pagesNums.value !== pageValue) {
+    results.value = count.value
+    ApiGetUserList({page: page.value, results: results.value })
+    return
+  }
+
+  if (total.value % count.value === 0) {
+    results.value = count.value
+  } else {
+    results.value = total.value % count.value
+  }
+
+  ApiGetUserList({page: page.value, results: results.value })
 }
 </script>
 
@@ -64,22 +108,27 @@ div(id="RandomUser"
     //- card component
     div(v-show="displayMode === 'List'")
       ul(class="max-w divide-y divide-gray-200 dark:divide-gray-700")
-        UserList
-        UserList
-        UserList
-        UserList
-        UserList
+        div(v-for="list in listData"
+          :key="list.login.uuid")
+          UserList(:photoUrl="list.picture.large"
+            :name="`${list.name.first} ${list.name.last}`"
+            :eMail="list.email"
+            :post="list.registered.age"
+            :followers="list.location.street.number"
+            :following="list.dob.age")
     //- list component
     div(v-show="displayMode === 'Card'"
       class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4")
-      UserCard
-      UserCard
-      UserCard
-      UserCard
-      UserCard
+      div(v-for="list in listData"
+        :key="list.login.uuid")
+        UserCard(:photoUrl="list.picture.large"
+          :name="`${list.name.first} ${list.name.last}`"
+          :post="list.registered.age"
+          :followers="list.location.street.number"
+          :following="list.dob.age")
 
   div(class="flex justify-center items-center")
     Pagination(:currentPage="page"
-      :total="total"
+      :total="pagesNums"
       @GetPage="GetPage")
 </template>
