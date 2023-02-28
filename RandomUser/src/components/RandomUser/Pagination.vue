@@ -87,7 +87,7 @@ div(id="Pagination")
           path(fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd")
 
     li(@click="ClickPage(1)")
-      a(:class="{'bg-gray-400': currentPage === 1}"
+      a(:class="{'bg-slate-400': currentPage === 1}"
         href="#" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white") {{ `1` }}
 
     li(v-show="showOneAfterManyButton")
@@ -97,7 +97,7 @@ div(id="Pagination")
       v-for="(num, index) in middleNums"
       :key="index"
       @click="ClickPage(num)")
-      a(:class="{'bg-gray-400': currentPage === num}"
+      a(:class="{'bg-slate-400': currentPage === num}"
         href="#" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white") {{ `${num}` }}
 
     li(v-show="showLastAfterManyButton")
@@ -105,7 +105,7 @@ div(id="Pagination")
 
     li(v-show="shwoLastNumButton"
       @click="ClickPage(total)")
-      a(:class="{'bg-gray-400': currentPage === total}"
+      a(:class="{'bg-slate-400': currentPage === total}"
         href="#" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white") {{ `${total}` }}
 
     li(v-show="showNextButton"

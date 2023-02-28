@@ -1,11 +1,15 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
 // props
 const props = defineProps({
   dropdownList: {
     tpye: Array,
     default: [10 , 30 , 50]
+  },
+  count: {
+    type: Number,
+    default: 10
   }
 })
 
@@ -16,8 +20,15 @@ const GetValue = () => {
 }
 
 // ref
-const currnetValue = ref(10)
+const currnetValue = ref(props.count)
 const showMenu = ref(false)
+
+// watch
+watch(
+  ()=> props.count,
+  (newValue)=>{
+    currnetValue.value = newValue
+})
 
 
 // event

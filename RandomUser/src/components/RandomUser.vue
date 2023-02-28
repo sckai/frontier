@@ -9,6 +9,7 @@ import Dropdown from '@/components/RandomUser/Dropdown.vue'
 import UserCard from '@/components/RandomUser/UserCard.vue'
 import UserList from '@/components/RandomUser/UserList.vue'
 import Pagination from '@/components/RandomUser/Pagination.vue'
+import { count } from 'console'
 
 // data
 const statusSet = ref('ALL') // ALL、Favorite, default: ALL
@@ -19,12 +20,17 @@ let favoriteData:any = reactive({ userData:[] })
 const page = ref(1)
 const count = ref(10)
 const total = ref(3010)
-const results = ref(count.value)
-const pagesNums = ref(Math.ceil(total.value / count.value))
+const results = ref(10)
+const pagesNums = ref(Math.ceil(total.value / JSON.parse(window.sessionStorage.getItem('count') || '10')))
+
 
 // Init
 const Init = onMounted(() => {
+  page.value = JSON.parse(window.sessionStorage.getItem('page') || '1')
+  count.value = JSON.parse(window.sessionStorage.getItem('count') || '10')
+  displayMode.value =(window.sessionStorage.getItem('mode') || 'Card').replaceAll("\"","")
   results.value = count.value
+  CheckLastPageInResults(page.value)
   ApiGetUserList({page: page.value, results: results.value })
 })
 
@@ -58,39 +64,52 @@ const ToggleStatus = (status: string) => {
 const ToggleDisplayMode = (mode: string) => {
   if (displayMode.value === mode) return
   displayMode.value = mode
+  SaveToSessionStorage('mode', displayMode.value)
 }
 
 // method
 const GetDropdownValue = (dropdownValue: any) => {
   page.value = 1
+  SaveToSessionStorage('page', page.value)
+
   pagesNums.value = Math.ceil(total.value / dropdownValue)
-  count.value = dropdownValue
   results.value = dropdownValue
+
+  SaveToSessionStorage('count', dropdownValue)
 
   ApiGetUserList({page: page.value, results: results.value })
 }
 
 const GetPage = (pageValue: number) => {
   page.value = pageValue
+  SaveToSessionStorage('page', page.value)
 
-  if (pagesNums.value !== pageValue) {
-    results.value = count.value
-    ApiGetUserList({page: page.value, results: results.value })
-    return
-  }
-
-  if (total.value % count.value === 0) {
-    results.value = count.value
-  } else {
-    results.value = total.value % count.value
-  }
+  CheckLastPageInResults(pageValue)
 
   ApiGetUserList({page: page.value, results: results.value })
 }
 
 // method
-const GetFavoriteStatus = (favoriteStatus: boolean, id: String) => {
+const CheckLastPageInResults = (pageValue: number) => {
+  const cacheCount = JSON.parse(window.sessionStorage.getItem('count') || '10')
 
+  if (pagesNums.value !== pageValue) {
+    results.value = cacheCount
+    return
+  }
+
+  if (total.value % cacheCount === 0) {
+    results.value = cacheCount
+  } else {
+    results.value = total.value % cacheCount
+  }
+}
+
+const SaveToSessionStorage = (content: string , value: any) => {
+  window.sessionStorage.setItem(content, JSON.stringify(value))
+}
+
+const GetFavoriteStatus = (favoriteStatus: boolean, id: String) => {
   listData.userData.forEach((userItem: any) => {
     if (userItem['login']['uuid'] === id) {
       if (favoriteStatus) favoriteData.userData.push(userItem)
@@ -128,6 +147,7 @@ div(id="RandomUser"
 
     div(class="flex justify-between items-center")
       Dropdown(class="mr-4"
+        :count="count"
         @getValue="GetDropdownValue")
 
       font-awesome-icon(:class="{ 'text-2xl text-indigo-700': displayMode === 'List' }"
