@@ -1,18 +1,25 @@
-# Vue 3 + TypeScript + Vite
+# Vue 3 + Tailwind CSS + Vite + Composition API
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+```
+該如何執行你完成的專案?
 
-## Recommended IDE Setup
+npm i
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+npm run dev
+```
 
-## Type Support For `.vue` Imports in TS
+```
+在這份專案中你遇到的困難、問題，以及解決的方法?
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+[１.]
+Modal 元件拆分應用 slot 去區分 header、body、footer,並且拆乾淨 Modal 本身應歸類在 module 類別, 相對的 UserModal 再引入 Modal 去規劃出自己的 Modal。
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+這部分應與設計討論整體專案 Modal 是以什麼形式呈現, 再去做規劃。
 
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+先以 UserModal 為對應 UserData 呈現的單一元件。
+
+[2.]
+自行規畫部分沒有到美感。
+
+先行參考網路上圖片或者設計。
+```
