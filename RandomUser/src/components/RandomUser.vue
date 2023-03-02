@@ -9,11 +9,13 @@ import Dropdown from '@/components/RandomUser/Dropdown.vue'
 import UserCard from '@/components/RandomUser/UserCard.vue'
 import UserList from '@/components/RandomUser/UserList.vue'
 import Pagination from '@/components/RandomUser/Pagination.vue'
-import { count } from 'console'
+import UserModal from '@/components/RandomUser/UserModal.vue'
 
 // data
 const statusSet = ref('ALL') // ALL、Favorite, default: ALL
 const displayMode = ref('Card') // Card 、List, default: Card
+const showUserModal = ref(false)
+const userData = ref({})
 let listData:any = reactive({ userData:[] })
 let displayData:any = reactive({ userData:[] })
 let favoriteData:any = reactive({ userData:[] })
@@ -67,6 +69,16 @@ const ToggleDisplayMode = (mode: string) => {
   SaveToSessionStorage('mode', displayMode.value)
 }
 
+const ClickShowModal = (userObject: any) => {
+  userData.value = userObject
+  showUserModal.value = true
+}
+
+const CloseUserModal = (value: boolean) => {
+  showUserModal.value = value
+  userData.value = {}
+}
+
 // method
 const GetDropdownValue = (dropdownValue: any) => {
   page.value = 1
@@ -89,7 +101,6 @@ const GetPage = (pageValue: number) => {
   ApiGetUserList({page: page.value, results: results.value })
 }
 
-// method
 const CheckLastPageInResults = (pageValue: number) => {
   const cacheCount = JSON.parse(window.sessionStorage.getItem('count') || '10')
 
@@ -127,8 +138,6 @@ const DelFavorite = (id: String) => {
     }
   }
 }
-
-// const 
 </script>
 
 <template lang="pug">
@@ -171,7 +180,8 @@ div(id="RandomUser"
             :eMail="list.email"
             :post="list.registered.age"
             :followers="list.location.street.number"
-            :following="list.dob.age")
+            :following="list.dob.age"
+            @click="ClickShowModal(list)")
     //- list component
     div(v-show="displayMode === 'Card'"
       class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4")
@@ -184,11 +194,18 @@ div(id="RandomUser"
           :followers="list.location.street.number"
           :following="list.dob.age"
           :isFavorite="list.isFavorite"
-          @GetFavoriteStatus="GetFavoriteStatus")
+          @GetFavoriteStatus="GetFavoriteStatus"
+          @click="ClickShowModal(list)")
 
   div(v-show="statusSet === 'ALL'"
     class="flex justify-center items-center")
     Pagination(:currentPage="page"
       :total="pagesNums"
       @GetPage="GetPage")
+
+  div
+    UserModal(:visible="showUserModal"
+      :maskClosable="true"
+      :userData="userData"
+      @OnClose="CloseUserModal")
 </template>

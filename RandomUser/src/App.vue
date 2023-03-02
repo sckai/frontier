@@ -3,8 +3,12 @@ import RandomUser from '@/components/RandomUser.vue'
 </script>
 
 <template lang="pug">
-RandomUser
+#App
+  RandomUser
 </template>
 
 <style lang="scss" scoped>
+#App {
+  user-select: none;
+}
 </style>
