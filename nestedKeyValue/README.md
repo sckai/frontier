@@ -1,18 +1,29 @@
-# Vue 3 + TypeScript + Vite
+# Vue 3 + Vite + Composition API
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+```
+version
 
-## Recommended IDE Setup
+node v18.12.1
+```
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+```
+該如何執行你完成的專案?
 
-## Type Support For `.vue` Imports in TS
+npm i
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+npm run dev
+```
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+```
+在這份專案中你遇到的困難、問題，以及解決的方法?
 
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+[1.]
+困難: TreeData 資料轉換的部份花了一些時間去看其他專案資料格式大概是怎麼定義的,才能去清楚怎麼處理成 TreeData 需要的資料格式。
+
+解決: 看一些其他專案的資料結構定義，再決定該元件資料結構如何定義。
+
+[2.]
+困難: @input and v-mode 綁定首次觸發 input event, 畫面沒有及時 render,但資料有改變。
+
+解決: 當資料重新寫進 TreeData Array 時,使用 v-if 銷毀調　TreeData ,但相同耗效能。
+```
